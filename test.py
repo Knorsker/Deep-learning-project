@@ -88,10 +88,12 @@ def plot_sweep(
     plt.colorbar(cax)
     plt.show()
 
+# Load sound to tensor:
+waveform, sample_rate = torchaudio.load('Data/nice-work.wav')
 
-
-sample_rate = 48000
-waveform = get_sine_sweep(sample_rate)
+# General data:
+# sample_rate = 48000
+# waveform = get_sine_sweep(sample_rate)
 
 plot_sweep(waveform, sample_rate, title="Original Waveform")
 Audio(waveform.numpy()[0], rate=sample_rate)
