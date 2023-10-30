@@ -5,8 +5,6 @@ from audiotools import AudioSignal
 model_path = dac.utils.download(model_type="44khz")
 model = dac.DAC.load(model_path)
 
-
-
 # model.to('cuda')
 
 # Load audio signal file
@@ -22,10 +20,10 @@ if signal.num_channels == 2:
 signal.to(model.device)
 
 x = model.preprocess(signal.audio_data, signal.sample_rate)
-z, codes, latents, _, _ = model.encode(x)
+# z, codes, latents, _, _ = model.encode(x)
 
-# Decode audio signal
-y = model.decode(z)
+# # Decode audio signal
+# y = model.decode(z)
 
 # Alternatively, use the `compress` and `decompress` functions
 # to compress long files.
