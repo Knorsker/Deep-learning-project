@@ -1,10 +1,10 @@
 import numpy as np
 
 a = 2+2
-print(a)
+print(5*a)
 
 b = a**2
-print(b)
+print(b + 2*a)
 
 c = b*a
 print(c)
