@@ -5,10 +5,10 @@ from audiotools import AudioSignal
 model_path = dac.utils.download(model_type="44khz")
 model = dac.DAC.load(model_path)
 
-model.to('cuda')
+# model.to('cuda')
 
 # Load audio signal file
-signal = AudioSignal('nice-work.wav')
+signal = AudioSignal('Data/nice-work.wav')
 print(signal)
 
 # If the audio signal has two channels, merge them into one
