@@ -5,8 +5,15 @@ from audiotools import AudioSignal
 model_path = dac.utils.download(model_type="44khz")
 model = dac.DAC.load(model_path)
 
+model.to('cuda')
+
 # Load audio signal file
-signal = AudioSignal('input.wav')
+signal = AudioSignal('nice-work.wav')
+print(signal)
+
+# If the audio signal has two channels, merge them into one
+if signal.num_channels == 2:
+    signal.audio_data = signal.audio_data.mean(axis=1, keepdims=True)  # Merge channels by taking the mean and keep third dimension
 
 # Encode audio signal as one long file
 # (may run out of GPU memory on long files)
@@ -32,4 +39,4 @@ x = dac.DACFile.load("compressed.dac")
 y = model.decompress(x)
 
 # Write to file
-y.write('output.wav')
+y.write('output1.wav')
