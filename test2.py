@@ -5,12 +5,12 @@ print(a)
 print(a**2)
 
 
-import dac
+# import dac
 from audiotools import AudioSignal
 
 # Download a model
-model_path = dac.utils.download(model_type="44khz")
-model = dac.DAC.load(model_path)
+# model_path = dac.utils.download(model_type="44khz")
+# model = dac.DAC.load(model_path)
 
 # model.to('cuda')
 
