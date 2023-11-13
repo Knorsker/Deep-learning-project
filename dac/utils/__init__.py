@@ -8,35 +8,35 @@ import dac
 DAC = dac.model.DAC
 # Accelerator = ml.Accelerator
 
-__MODEL_LATEST_TAGS__ = {
-    ("44khz", "8kbps"): "0.0.1",
-    ("24khz", "8kbps"): "0.0.4",
-    ("16khz", "8kbps"): "0.0.5",
-    ("44khz", "16kbps"): "1.0.0",
-}
+# __MODEL_LATEST_TAGS__ = {
+#     ("44khz", "8kbps"): "0.0.1",
+#     ("24khz", "8kbps"): "0.0.4",
+#     ("16khz", "8kbps"): "0.0.5",
+#     ("44khz", "16kbps"): "1.0.0",
+# }
 
-__MODEL_URLS__ = {
-    (
-        "44khz",
-        "0.0.1",
-        "8kbps",
-    ): "https://github.com/descriptinc/descript-audio-codec/releases/download/0.0.1/weights.pth",
-    (
-        "24khz",
-        "0.0.4",
-        "8kbps",
-    ): "https://github.com/descriptinc/descript-audio-codec/releases/download/0.0.4/weights_24khz.pth",
-    (
-        "16khz",
-        "0.0.5",
-        "8kbps",
-    ): "https://github.com/descriptinc/descript-audio-codec/releases/download/0.0.5/weights_16khz.pth",
-    (
-        "44khz",
-        "1.0.0",
-        "16kbps",
-    ): "https://github.com/descriptinc/descript-audio-codec/releases/download/1.0.0/weights_44khz_16kbps.pth",
-}
+# __MODEL_URLS__ = {
+#     (
+#         "44khz",
+#         "0.0.1",
+#         "8kbps",
+#     ): "https://github.com/descriptinc/descript-audio-codec/releases/download/0.0.1/weights.pth",
+#     (
+#         "24khz",
+#         "0.0.4",
+#         "8kbps",
+#     ): "https://github.com/descriptinc/descript-audio-codec/releases/download/0.0.4/weights_24khz.pth",
+#     (
+#         "16khz",
+#         "0.0.5",
+#         "8kbps",
+#     ): "https://github.com/descriptinc/descript-audio-codec/releases/download/0.0.5/weights_16khz.pth",
+#     (
+#         "44khz",
+#         "1.0.0",
+#         "16kbps",
+#     ): "https://github.com/descriptinc/descript-audio-codec/releases/download/1.0.0/weights_44khz_16kbps.pth",
+# }
 
 
 @argbind.bind(group="download", positional=True, without_prefix=True)
@@ -109,15 +109,15 @@ def download(
     return local_path
 
 
-def load_model(
-    model_type: str = "44khz",
-    model_bitrate: str = "8kbps",
-    tag: str = "latest",
-    load_path: str = None,
-):
-    if not load_path:
-        load_path = download(
-            model_type=model_type, model_bitrate=model_bitrate, tag=tag
-        )
-    generator = DAC.load(load_path)
-    return generator
+# def load_model(
+#     model_type: str = "44khz",
+#     model_bitrate: str = "8kbps",
+#     tag: str = "latest",
+#     load_path: str = None,
+# ):
+#     if not load_path:
+#         load_path = download(
+#             model_type=model_type, model_bitrate=model_bitrate, tag=tag
+#         )
+#     generator = DAC.load(load_path)
+#     return generator

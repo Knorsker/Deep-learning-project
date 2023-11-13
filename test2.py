@@ -11,12 +11,13 @@ print(a**2)
 print(v+b)
 
 
-import dac
+# import dac
+from help import download, load_model
 import torchaudio
 
 # Download a model
-model_path = dac.utils.download(model_type="44khz")
-model = dac.DAC.load(model_path)
+model_path = download(model_type="44khz")
+model = load_model(model_path)
 
 model.to('cuda')
 
