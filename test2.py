@@ -11,6 +11,9 @@ print(a**2)
 print(v+b)
 
 
+import sys
+sys.path.append("/zhome/87/1/168411/descript-audio-codec")
+
 import dac
 from audiotools import AudioSignal
 
