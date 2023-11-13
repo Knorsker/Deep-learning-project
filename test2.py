@@ -1,6 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
-
 a = 2+2
 
 v = np.array([2,3,4])
@@ -11,9 +9,6 @@ print(a)
 print(a**2)
 
 print(v+b)
-
-plt.bar(v,b)
-plt.show()
 
 
 # import dac
