@@ -62,7 +62,8 @@ def download(
         Directory path required to load model via audiotools.
     """
     # model_type = model_type.lower()
-    # tag = tag.lower()
+    model_type = str(model_type).lower()
+    tag = tag.lower()
 
     assert model_type in [
         "44khz",
