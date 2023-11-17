@@ -8,6 +8,18 @@
 #SBATCH --time=00:30:00
 
 
+### -- set the email address -# please uncomment the following line and put in your e-mail address, # if you want to receive e-mail notifications on a non-default address 
+#BSUB -u s20s214704@student.dtu.dk 
+### -- send notification at start -
+#BSUB -B 
+### -- send notification at completion -
+#BSUB -N 
+### -- Specify the output and error file. %J is the job-id -
+### -- -o and -e mean append, -oo and -eo mean overwrite -
+#BSUB -o %J.out
+#BSUB -e %J.err
+
+
 # Activate the virtual environment
 source /zhome/87/1/168411/dl-venv/bin/activate
 
