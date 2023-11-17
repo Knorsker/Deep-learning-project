@@ -12,19 +12,19 @@ print(v+b)
 
 
 # import dac
-from help import download, load_model
-import torchaudio
+# from help import download, load_model
+# import torchaudio
 
-# Download a model
-model_path = download(model_type="44khz")
-model = load_model(model_path)
+# # Download a model
+# model_path = download(model_type="44khz")
+# model = load_model(model_path)
 
-model.to('cuda')
+# model.to('cuda')
 
-#Load audio signal file
-file = '/work3/s164396/data/DNS-Challenge-4/datasets_fullband/clean_fullband/vctk_wav48_silence_trimmed/p225/p225_001_mic1.wav'
-signal = torchaudio.load(file)
-print(signal)
+# #Load audio signal file
+# file = '/work3/s164396/data/DNS-Challenge-4/datasets_fullband/clean_fullband/vctk_wav48_silence_trimmed/p225/p225_001_mic1.wav'
+# signal = torchaudio.load(file)
+# print(signal)
 
 
 
