@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Activate the virtual environment
-source dl-venv/bin/activate
+source /zhome/87/1/168411/dl-venv/bin/activate
 
 # Change to the directory containing the Python script
 cd /zhome/87/1/168411/Deep-learning-project
