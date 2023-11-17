@@ -26,5 +26,5 @@
 #BSUB -o %J.out
 #BSUB -e %J.err
 # here follow the commands you want to execute
-source /zhome/87/1/168411/Deep-learning-project
+source source dl-venv/bin/activate
 python3 test2.py &> output.txt
