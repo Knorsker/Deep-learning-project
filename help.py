@@ -61,9 +61,9 @@ def download(
     Path
         Directory path required to load model via audiotools.
     """
-    if isinstance(model_type, Path):
+    if isinstance(model_type, Path): #NOTE !!!!!
         model_type = str(model_type)
-        
+
     model_type = model_type.lower()
     tag = tag.lower()
 
