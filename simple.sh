@@ -19,7 +19,7 @@
 
 
 ### -- set the email address -# please uncomment the following line and put in your e-mail address, # if you want to receive e-mail notifications on a non-default address 
-#BSUB -u s20s214704@student.dtu.dk 
+#BSUB -u s214704@student.dtu.dk 
 ### -- send notification at start -
 #BSUB -B 
 ### -- send notification at completion -
@@ -36,5 +36,8 @@ source /zhome/87/1/168411/dl-venv/bin/activate
 # Change to the directory containing the Python script
 cd /zhome/87/1/168411/Deep-learning-project
 
-# Run the Python script
-python test2.py
+# Your data is assumed to be in a directory on the cluster, adjust the path accordingly
+data_directory=/work3/s164396/data/DNS-Challenge-4/datasets_fullband/clean_fullband/vctk_wav48_silence_trimmed/p225
+
+# Your Python script execution command with the correct data path
+python3 your_script.py "$data_directory/p225_001_mic1.wav.txt" &> test2.txt
