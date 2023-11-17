@@ -1,11 +1,21 @@
 #!/bin/bash
 
-#SBATCH --job-name=test_ejk
-#SBATCH --partition=gpuv100
-#SBATCH --nodes=4
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=4
-#SBATCH --time=00:30:00
+### General options
+### -- specify queue -
+#BSUB -q gpuv100
+#BSUB -gpu "num=1"
+### -- set the job Name -
+#BSUB -J test_ejk
+### -- ask for number of cores (default: 1) - 4 cores per gpu
+#BSUB -n 4
+### -- specify that the cores must be on the same host -
+#BSUB -R "span[hosts=1]" 
+### -- specify that we need x GB of memory per core/slot -
+#BSUB -R "rusage[mem=6GB]" 
+### -- specify that we want the job to get killed if it exceeds 3 GB per core/slot -
+#BSUB -M 6GB
+### -- set walltime limit: hh:mm -
+#BSUB -W 00:30 
 
 
 ### -- set the email address -# please uncomment the following line and put in your e-mail address, # if you want to receive e-mail notifications on a non-default address 
