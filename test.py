@@ -105,4 +105,83 @@ for signals in dataloader:
       print("----------------------")
 """
 
-print('Done')
+print('Half done')
+
+
+import torch
+import torch.optim as optim
+import torch.nn as nn
+from torch.utils.data import DataLoader
+import dac
+import torchaudio.functional as F
+import torchaudio
+
+num_epochs = 10
+
+# Create the model, loss function, and optimizer
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+target_sample_rate = 44100  # Replace with your desired sample rate
+
+# Download a model
+model_path = dac.utils.download(model_type="44khz")
+model = dac.DAC.load(model_path)
+model = model.to(device)
+criterion = nn.MSELoss()
+lr = 1e-4
+optimizer = optim.AdamW(model.parameters(), lr=lr)
+
+loss_vec = []
+epoch_vec = []
+
+# Training loop
+for epoch in range(num_epochs):
+    model.train()
+    total_loss = 0.0
+
+    for signals_batch in dataloader:
+        # Iterate over signals within the batch
+        for signal, noise in signals_batch:
+            noisy_signal = signal
+            noisy_signal.audio_data = F.add_noise(signal.audio_data, noise.audio_data, torch.tensor([-5]))
+            # Zero the gradients
+            optimizer.zero_grad()
+
+            # Forward pass
+            noisy_signal.audio_data.requires_grad_(True)
+            noisy_signal.to(model.device)
+            noisy_signal.audio_data = torch.unsqueeze(noisy_signal.audio_data,dim=1)
+            x = model.preprocess(noisy_signal.audio_data, noisy_signal.sample_rate.item())
+            z, codes, latents, _, _ = model.encode(x)
+
+            # Decode audio signal
+            y = model.decode(z)
+
+            if y.shape[2] > signal.audio_data.shape[2]:
+                y = y[:, :, :signal.audio_data.shape[2]]
+            elif y.shape[2] < signal.audio_data.shape[2]:
+                padding = signal.audio_data.shape[2] - y.shape[2]
+                y = torch.nn.functional.pad(y, (0, padding))
+
+            # Calculate the loss for the current signal
+            loss = criterion(y, signal.audio_data)
+
+            # Backpropagation
+            loss.backward()
+
+            # Update model parameters
+            optimizer.step()
+
+            total_loss += loss.item()
+            print(total_loss)
+        loss_vec.append(total_loss / len(dataloader))
+        epoch_vec.append(epoch)
+
+    # Print training statistics
+    print("------------------------------------------------------------------------")
+    print(f'Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(dataloader)}')
+    print("------------------------------------------------------------------------")
+
+# Save the trained model
+# torch.save(model.state_dict(), 'trained_dac_model.pth')
+
