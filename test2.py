@@ -11,47 +11,37 @@ print(a**2)
 print(v+b)
 
 
-# import dac
-# from help import download, load_model
-# import torchaudio
+import dac
+from help import download, load_model
+import torchaudio
 
-# # Download a model
-# model_path = download(model_type="44khz")
-# model = load_model(model_path)
+#Load audio signal file
+file = '/work3/s164396/data/DNS-Challenge-4/datasets_fullband/clean_fullband/vctk_wav48_silence_trimmed/p225/p225_001_mic1.wav'
+signal = torchaudio.load(file)
+print(signal)
 
-# model.to('cuda')
+# import sys
 
-# #Load audio signal file
-# file = '/work3/s164396/data/DNS-Challenge-4/datasets_fullband/clean_fullband/vctk_wav48_silence_trimmed/p225/p225_001_mic1.wav'
-# signal = torchaudio.load(file)
-# print(signal)
+# if __name__ == "__main__":
+#     if len(sys.argv) != 2:
+#         print("Usage: test2.py p225_001_mic1.wav")
+#         sys.exit(1)
 
-import sys
+#     input_data_file = sys.argv[1]
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: test2.py p225_001_mic1.wav")
-        sys.exit(1)
+#     # Now you can use 'input_data_file' in your script to access the data
+#     try:
+#         with open(input_data_file, 'r') as file:
+#             # Process the data or perform other operations
+#             data = file.read()
+#             print(f"Successfully read data from {input_data_file}:\n{data}")
+#     except FileNotFoundError:
+#         print(f"Error: File not found - {input_data_file}")
+#         sys.exit(1)
+#     except Exception as e:
+#         print(f"An error occurred: {e}")
+#         sys.exit(1)
 
-    input_data_file = sys.argv[1]
+# print('yes')
 
-    # Now you can use 'input_data_file' in your script to access the data
-    try:
-        with open(input_data_file, 'r') as file:
-            # Process the data or perform other operations
-            data = file.read()
-            print(f"Successfully read data from {input_data_file}:\n{data}")
-    except FileNotFoundError:
-        print(f"Error: File not found - {input_data_file}")
-        sys.exit(1)
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        sys.exit(1)
-
-
-import matplotlib.pyplot as plt
-plt.plot([1, 2, 3], [1, 4, 9])
-plt.show()
-
-plt.savefig('foo.png')
 
