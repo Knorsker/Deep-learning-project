@@ -49,4 +49,9 @@ if __name__ == "__main__":
         sys.exit(1)
 
 
+import matplotlib.pyplot as plt
+plt.plot([1, 2, 3], [1, 4, 9])
+plt.show()
+
+plt.savefig('foo.png')
 
