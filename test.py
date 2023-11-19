@@ -115,7 +115,7 @@ from torch.utils.data import DataLoader
 import dac
 import torchaudio.functional as F
 import torchaudio
-from help import download
+from help import download, DAC
 
 num_epochs = 10
 
@@ -126,7 +126,7 @@ target_sample_rate = 44100  # Replace with your desired sample rate
 
 # Download a model
 model_path = download(model_type="44khz")
-model = dac.DAC.load(model_path)
+model = DAC.load(model_path)
 model = model.to(device)
 criterion = nn.MSELoss()
 lr = 1e-4
