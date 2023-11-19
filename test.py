@@ -1,102 +1,108 @@
-import torch
+from torch.cuda.random import set_rng_state
+from torch.utils.data import Dataset, DataLoader
 import torchaudio
+import os
+import torch
 import torchaudio.functional as F
-import torchaudio.transforms as T
+import numpy as np
 
+class AudioData:
+    def __init__(self, audio_data, sample_rate):
+        self.audio_data = audio_data
+        self.sample_rate = sample_rate
 
-import math
-import timeit
+    def to(self, device):
+        self.audio_data = self.audio_data.to(device)
+        self.sample_rate = torch.tensor(self.sample_rate, device=device)
+        return self
 
-import librosa
-import matplotlib.colors as mcolors
-import matplotlib.pyplot as plt
-import pandas as pd
-# import resampy
-from IPython.display import Audio
+    def device(self):
+        return self.audio_data.device
 
-pd.set_option("display.max_rows", None)
-pd.set_option("display.max_columns", None)
+    def clone(self):
+        return self.audio_data.clone()
 
-DEFAULT_OFFSET = 201
+    def audio_data(self):
+        return self.audio_data
 
+    def sample_rate(self):
+        return self.sample_rate
 
-def _get_log_freq(sample_rate, max_sweep_rate, offset):
-    """Get freqs evenly spaced out in log-scale, between [0, max_sweep_rate // 2]
+class AudioDataset(Dataset):
+    def __init__(self, file_paths_sound, file_paths_noise, target_sample_rate=44100, fixed_length=None):
+        self.file_paths_sound = file_paths_sound
+        self.file_paths_noise = file_paths_noise
+        self.target_sample_rate = target_sample_rate
+        self.fixed_length = fixed_length
 
-    offset is used to avoid negative infinity `log(offset + x)`.
+    def __len__(self):
+        return len(self.file_paths_sound)
 
-    """
-    start, stop = math.log(offset), math.log(offset + max_sweep_rate // 2)
-    return torch.exp(torch.linspace(start, stop, sample_rate, dtype=torch.double)) - offset
+    def __getitem__(self, idx):
+        audio_path = self.file_paths_sound[idx]
+        noise_path = np.random.choice(self.file_paths_noise)
 
+        audio_data, sample_rate = torchaudio.load(audio_path)
+        if sample_rate != target_sample_rate:
+            sample_rate = target_sample_rate
+        signal = AudioData(audio_data,sample_rate)
 
-def _get_inverse_log_freq(freq, sample_rate, offset):
-    """Find the time where the given frequency is given by _get_log_freq"""
-    half = sample_rate // 2
-    return sample_rate * (math.log(1 + freq / offset) / math.log(1 + half / offset))
+        audio_data_noise, sample_rate_noise = torchaudio.load(noise_path)
+        if sample_rate_noise != target_sample_rate:
+            sample_rate_noise = target_sample_rate
+        noise = AudioData(audio_data_noise, sample_rate_noise)
 
+        # Convert to mono if stereo
+        if signal.audio_data.shape[0] > 1:
+            signal = signal.to_mono()
+        if noise.audio_data.shape[0] > 1:
+            noise = noise.to_mono()
 
-def _get_freq_ticks(sample_rate, offset, f_max):
-    # Given the original sample rate used for generating the sweep,
-    # find the x-axis value where the log-scale major frequency values fall in
-    times, freq = [], []
-    for exp in range(2, 5):
-        for v in range(1, 10):
-            f = v * 10**exp
-            if f < sample_rate // 2:
-                t = _get_inverse_log_freq(f, sample_rate, offset) / sample_rate
-                times.append(t)
-                freq.append(f)
-    t_max = _get_inverse_log_freq(f_max, sample_rate, offset) / sample_rate
-    times.append(t_max)
-    freq.append(f_max)
-    return times, freq
+        # Pad or trim to the specified maximum length
+        if self.fixed_length is not None:
+            current_length = signal.audio_data.shape[1]
+            if current_length < self.fixed_length:
+                # Pad if the signal is shorter than the fixed length
+                padding = self.fixed_length - current_length
+                signal.audio_data = torch.nn.functional.pad(signal.audio_data, (0, padding))
+            elif current_length > self.fixed_length:
+                # Truncate if the signal is longer than the fixed length
+                signal.audio_data = signal.audio_data[:, :self.fixed_length]
 
+            current_length = noise.audio_data.shape[1]
+            if current_length < self.fixed_length:
+                padding = self.fixed_length - current_length
+                noise.audio_data = torch.nn.functional.pad(noise.audio_data, (0, padding))
+            elif current_length > self.fixed_length:
+                noise.audio_data = noise.audio_data[:, :self.fixed_length]
 
-def get_sine_sweep(sample_rate, offset=DEFAULT_OFFSET):
-    max_sweep_rate = sample_rate
-    freq = _get_log_freq(sample_rate, max_sweep_rate, offset)
-    delta = 2 * math.pi * freq / sample_rate
-    cummulative = torch.cumsum(delta, dim=0)
-    signal = torch.sin(cummulative).unsqueeze(dim=0)
-    return signal
+        return signal, noise
 
+def collate_fn(batch):
+    return batch
 
-def plot_sweep(
-    waveform,
-    sample_rate,
-    title,
-    max_sweep_rate=48000,
-    offset=DEFAULT_OFFSET,
-):
-    x_ticks = [100, 500, 1000, 5000, 10000, 20000, max_sweep_rate // 2]
-    y_ticks = [1000, 5000, 10000, 20000, sample_rate // 2]
+# Specify the file paths as before
+drive_path = '/work3/s164396/data/DNS-Challenge-4/datasets_fullband/'
+audio_folder = 'clean_fullband/vctk_wav48_silence_trimmed/p225'
+noise_folder = "noise_fullband"
+file_paths_sound = [os.path.join(drive_path, audio_folder, filename) for filename in os.listdir(os.path.join(drive_path, audio_folder))]
+file_paths_noise = [os.path.join(drive_path, noise_folder, filename) for filename in os.listdir(os.path.join(drive_path, noise_folder))]
 
-    time, freq = _get_freq_ticks(max_sweep_rate, offset, sample_rate // 2)
-    freq_x = [f if f in x_ticks and f <= max_sweep_rate // 2 else None for f in freq]
-    freq_y = [f for f in freq if f in y_ticks and 1000 <= f <= sample_rate // 2]
+max_length = 4410
 
-    figure, axis = plt.subplots(1, 1)
-    _, _, _, cax = axis.specgram(waveform[0].numpy(), Fs=sample_rate)
-    plt.xticks(time, freq_x)
-    plt.yticks(freq_y, freq_y)
-    axis.set_xlabel("Original Signal Frequency (Hz, log scale)")
-    axis.set_ylabel("Waveform Frequency (Hz)")
-    axis.xaxis.grid(True, alpha=0.67)
-    axis.yaxis.grid(True, alpha=0.67)
-    figure.suptitle(f"{title} (sample rate: {sample_rate} Hz)")
-    plt.colorbar(cax)
-    plt.show()
+# Create dataset and dataloader
+audio_dataset = AudioDataset(file_paths_sound, file_paths_noise, fixed_length=max_length)
+batch_size = 8
+dataloader = DataLoader(audio_dataset, batch_size=batch_size, shuffle=True, num_workers=2, collate_fn=collate_fn)
+"""
+# Example usage
+for signals in dataloader:
+  for signal, noise in signals:
+      print(signal.audio_data.shape)  # Print the number of frames in each signal in the batch
+      print(signal.sample_rate)  # Print the sample rate of each signal in the batch
+      print(noise.audio_data.shape)
+      print(noise.sample_rate)
+      print("----------------------")
+"""
 
-# Load sound to tensor:
-waveform, sample_rate = torchaudio.load('Data/nice-work.wav')
-
-# General data:
-# sample_rate = 48000
-# waveform = get_sine_sweep(sample_rate)
-
-plot_sweep(waveform, sample_rate, title="Original Waveform")
-Audio(waveform.numpy()[0], rate=sample_rate)
-
-print('done')
-
+print('Done')
