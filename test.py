@@ -118,7 +118,6 @@ import torchaudio
 from help import download, DAC
 
 num_epochs = 10
-print('done 114')
 
 # Create the model, loss function, and optimizer
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -135,21 +134,20 @@ optimizer = optim.AdamW(model.parameters(), lr=lr)
 
 loss_vec = []
 epoch_vec = []
-print('done 131')
+
 
 # Training loop
 for epoch in range(num_epochs):
     model.train()
     total_loss = 0.0
-    print('done 137')
+
     for signals_batch in dataloader:
         # Iterate over signals within the batch
         for signal, noise in signals_batch:
             # Calculate signal and noise power to find SNR value
-            print('done 142')
             signal_power = np.sum(signal.audio_data.numpy()**2) / len(signal.audio_data.numpy())
             noise_power = np.sum(noise.audio_data.numpy()**2) / len(noise.audio_data.numpy())
-            print('done 145')
+
             # If noise_power or L2-norm of noise is 0, correct it
             if noise_power == 0 or torch.norm(noise.audio_data, p = 2) == 0:
                 noise.audio_data += 1e-5
@@ -159,7 +157,7 @@ for epoch in range(num_epochs):
             # Define noisy signal
             noisy_signal = signal
             # Create noisy signal
-            noisy_signal.audio_data = F.add_noise(signal.audio_data, noise.audio_data, torch.tensor([snr_db]))
+            noisy_signal.audio_data = torchaudio.functional.add_noise(signal.audio_data, noise.audio_data, torch.tensor([snr_db]))
             # Zero the gradients
             optimizer.zero_grad()
 
