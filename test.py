@@ -5,7 +5,7 @@ import os
 import torch
 import torchaudio.functional as F
 import numpy as np
-from torch.nn.utils.parametrizations import weight_norm
+
 
 class AudioData:
     def __init__(self, audio_data, sample_rate):
@@ -111,6 +111,7 @@ import torchaudio
 from help import download, DAC
 
 num_epochs = 10
+print('done 114')
 
 # Create the model, loss function, and optimizer
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -127,6 +128,7 @@ optimizer = optim.AdamW(model.parameters(), lr=lr)
 
 loss_vec = []
 epoch_vec = []
+print('done 131')
 
 # Training loop
 for epoch in range(num_epochs):
