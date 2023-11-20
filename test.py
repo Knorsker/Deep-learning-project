@@ -118,7 +118,7 @@ target_sample_rate = 44100  # Replace with your desired sample rate
 
 # Download a model
 model_path = download(model_type="44khz")
-model = dac.DAC.load(model_path)
+model = DAC.load(model_path)
 model = model.to(device)
 criterion = nn.MSELoss()
 lr = 1e-4
