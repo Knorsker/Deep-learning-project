@@ -31,7 +31,7 @@
 
 
 # Activate the virtual environment
-source /zhome/87/1/168411/dl-venv/bin/activate
+source /zhome/87/1/168411/dl-venv2/bin/activate
 
 # Change to the directory containing the Python script
 cd /zhome/87/1/168411/Deep-learning-project
@@ -40,5 +40,6 @@ cd /zhome/87/1/168411/Deep-learning-project
 data_directory=/work3/s164396/data/DNS-Challenge-4/datasets_fullband/clean_fullband/vctk_wav48_silence_trimmed/p225
 
 # Your Python script execution command with the correct data path
-python3 test.py &> /zhome/87/1/168411/Deep-learning-project/test.txt
+python3 test.py
+# python3 test.py &> /zhome/87/1/168411/Deep-learning-project/test.txt
 
