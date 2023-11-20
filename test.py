@@ -134,7 +134,7 @@ print('done 131')
 for epoch in range(num_epochs):
     model.train()
     total_loss = 0.0
-
+    print('done 137')
     for signals_batch in dataloader:
         # Iterate over signals within the batch
         for signal, noise in signals_batch:
