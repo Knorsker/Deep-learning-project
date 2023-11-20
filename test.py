@@ -96,7 +96,7 @@ file_paths_noise = [os.path.join(drive_path, noise_folder, filename) for filenam
 # Create dataset and dataloader
 audio_dataset = AudioDataset(file_paths_sound, file_paths_noise)
 batch_size = 8
-dataloader = DataLoader(audio_dataset, batch_size=batch_size, shuffle=True, num_workers=2, collate_fn=collate_fn)
+dataloader = DataLoader(audio_dataset, batch_size=batch_size, shuffle=True, num_workers=0, collate_fn=collate_fn)
 
 print('Dataloader - done')
 
