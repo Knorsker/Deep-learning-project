@@ -84,9 +84,12 @@ def collate_fn(batch):
     return batch
 
 # Specify the file paths as before
-drive_path = r'C:\Users\julie\OneDrive\Skrivebord\Deep Learning, 02456\Project\Deep-learning-project'
-audio_folder = 'Data'
-noise_folder = "Noise"
+# drive_path = r'C:\Users\julie\OneDrive\Skrivebord\Deep Learning, 02456\Project\Deep-learning-project'
+# audio_folder = 'Data'
+# noise_folder = "Noise"
+drive_path = '/work3/s164396/data/DNS-Challenge-4/datasets_fullband/'
+audio_folder = 'clean_fullband/vctk_wav48_silence_trimmed/p225'
+noise_folder = "noise_fullband"
 file_paths_sound = [os.path.join(drive_path, audio_folder, filename) for filename in os.listdir(os.path.join(drive_path, audio_folder))]
 file_paths_noise = [os.path.join(drive_path, noise_folder, filename) for filename in os.listdir(os.path.join(drive_path, noise_folder))]
 
