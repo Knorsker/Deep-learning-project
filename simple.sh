@@ -40,5 +40,5 @@ cd /zhome/87/1/168411/Deep-learning-project
 data_directory=/work3/s164396/data/DNS-Challenge-4/datasets_fullband/clean_fullband/vctk_wav48_silence_trimmed/p225
 
 # Your Python script execution command with the correct data path
-python3 test.py "$data_directory/p225_001_mic1.wav.txt" &> /zhome/87/1/168411/Deep-learning-project/test2.txt
+python3 test.py &> /zhome/87/1/168411/Deep-learning-project/test2.txt
 

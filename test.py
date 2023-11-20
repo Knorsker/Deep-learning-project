@@ -5,6 +5,7 @@ import os
 import torch
 import torchaudio.functional as F
 import numpy as np
+from torch.nn.utils.parametrizations import weight_norm
 
 class AudioData:
     def __init__(self, audio_data, sample_rate):
