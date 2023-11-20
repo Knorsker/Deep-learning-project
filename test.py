@@ -46,6 +46,7 @@ class AudioDataset(Dataset):
         print('done 2.46')
 
         audio_data, sample_rate = torchaudio.load(audio_path)
+        print('hej emil')
         if sample_rate != target_sample_rate:
             sample_rate = target_sample_rate
         signal = AudioData(audio_data,sample_rate)
