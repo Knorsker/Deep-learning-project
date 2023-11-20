@@ -15,8 +15,7 @@
 ### -- specify that we want the job to get killed if it exceeds 3 GB per core/slot -
 #BSUB -M 6GB
 ### -- set walltime limit: hh:mm -
-#BSUB -W 00:30 
-
+#BSUB -W 03:00
 
 ### -- set the email address -# please uncomment the following line and put in your e-mail address, # if you want to receive e-mail notifications on a non-default address 
 #BSUB -u s214704@student.dtu.dk 
@@ -38,6 +37,13 @@ cd /zhome/87/1/168411/Deep-learning-project
 
 # Your data is assumed to be in a directory on the cluster, adjust the path accordingly
 data_directory=/work3/s164396/data/DNS-Challenge-4/datasets_fullband/clean_fullband/vctk_wav48_silence_trimmed/p225
+
+#Create output file, override if already present  
+output=output_file.txt  
+#Write data to a file  
+ls > $output  
+#Checking the content of the file  
+gedit output_file.txt  
 
 # Your Python script execution command with the correct data path
 python3 test.py

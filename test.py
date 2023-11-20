@@ -120,7 +120,7 @@ target_sample_rate = 44100  # Replace with your desired sample rate
 model_path = download(model_type="44khz")
 model = DAC.load(model_path)
 model = model.to(device)
-criterion = nn.MSELoss()
+criterion = nn.MSELoss() # NOTE !!! HUBERLOSS, L1-loss, 
 lr = 1e-4
 optimizer = optim.AdamW(model.parameters(), lr=lr)
 
@@ -190,6 +190,8 @@ for epoch in range(num_epochs):
     print("------------------------------------------------------------------------")
 
     output.append(total_loss / len(dataloader))
+    
+    print(f'Epoch [{epoch + 1}/{num_epochs}]')
 
 np.savetxt('Output', output)    
 # Save the trained model
