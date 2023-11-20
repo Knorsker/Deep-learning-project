@@ -3,7 +3,7 @@
 ### General options
 ### -- specify queue -
 #BSUB -q gpuv100
-#BSUB -gpu "num=1"
+#BSUB -gpu "num=4"
 ### -- set the job Name -
 #BSUB -J test_ejk
 ### -- ask for number of cores (default: 1) - 4 cores per gpu
