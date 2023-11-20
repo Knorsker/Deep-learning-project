@@ -139,8 +139,10 @@ for epoch in range(num_epochs):
         # Iterate over signals within the batch
         for signal, noise in signals_batch:
             # Calculate signal and noise power to find SNR value
+            print('done 142')
             signal_power = np.sum(signal.audio_data.numpy()**2) / len(signal.audio_data.numpy())
             noise_power = np.sum(noise.audio_data.numpy()**2) / len(noise.audio_data.numpy())
+            print('done 145')
             # If noise_power or L2-norm of noise is 0, correct it
             if noise_power == 0 or torch.norm(noise.audio_data, p = 2) == 0:
                 noise.audio_data += 1e-5
