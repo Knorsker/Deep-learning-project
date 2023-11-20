@@ -39,31 +39,25 @@ class AudioDataset(Dataset):
         return len(self.file_paths_sound)
 
     def __getitem__(self, idx):
-        print('done 2.43')
         audio_path = self.file_paths_sound[idx]
         noise_path = np.random.choice(self.file_paths_noise)
-        print('done 2.46')
 
         audio_data, sample_rate = torchaudio.load(audio_path)
-        print('hej emil')
         if sample_rate != target_sample_rate:
             sample_rate = target_sample_rate
         signal = AudioData(audio_data,sample_rate)
 
-        print('done 2.53')
         audio_data_noise, sample_rate_noise = torchaudio.load(noise_path)
         if sample_rate_noise != target_sample_rate:
             sample_rate_noise = target_sample_rate
         noise = AudioData(audio_data_noise, sample_rate_noise)
 
-        print('done 2.59')
         # Convert to mono if stereo
         if signal.audio_data.shape[0] > 1:
             signal = signal.to_mono()
         if noise.audio_data.shape[0] > 1:
             noise = noise.to_mono()
 
-        print('done 2.66')
         # Pad or trim to the specified length of 5 seconds
         self.fixed_length = int(signal.sample_rate*0.1)
         current_length = signal.audio_data.shape[1]
@@ -75,7 +69,6 @@ class AudioDataset(Dataset):
             start_position = np.random.randint(0, max(1, signal.audio_data.shape[1] - self.fixed_length))
             signal.audio_data = signal.audio_data[:, start_position:start_position + self.fixed_length]
 
-        print('done 2.78')
         self.fixed_length = int(noise.sample_rate*0.1)
         current_length = noise.audio_data.shape[1]
         if current_length < self.fixed_length:
