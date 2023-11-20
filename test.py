@@ -3,7 +3,6 @@ from torch.utils.data import Dataset, DataLoader
 import torchaudio
 import os
 import torch
-import torchaudio.functional as F
 import numpy as np
 
 
@@ -157,7 +156,8 @@ for epoch in range(num_epochs):
             # Define noisy signal
             noisy_signal = signal
             # Create noisy signal
-            noisy_signal.audio_data = torchaudio.functional.add_noise(signal.audio_data, noise.audio_data, torch.tensor([snr_db]))
+            noise_constant = torch.sqrt((torch.norm(signal.audio_data,p=2)**2/torch.norm(noise.audio_data,p=2)**2)*10**(-snr_db/10))
+            noisy_signal.audio_data = signal.audio_data + noise_constant*noise.audio_data
             # Zero the gradients
             optimizer.zero_grad()
 
