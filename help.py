@@ -5,7 +5,7 @@ from typing import List, Union
 import numpy as np
 import math
 from help2 import Snake1d, WNConv1d, ResidualVectorQuantize, WNConvTranspose1d, CodecMixin
-from audiotools.ml import BaseModel
+from help3 import BaseModel
 from pathlib import Path
 
 __MODEL_LATEST_TAGS__ = {
