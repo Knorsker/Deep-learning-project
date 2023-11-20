@@ -40,8 +40,10 @@ class AudioDataset(Dataset):
         return len(self.file_paths_sound)
 
     def __getitem__(self, idx):
+        print('done 2.43')
         audio_path = self.file_paths_sound[idx]
         noise_path = np.random.choice(self.file_paths_noise)
+        print('done 2.46')
 
         audio_data, sample_rate = torchaudio.load(audio_path)
         if sample_rate != target_sample_rate:
