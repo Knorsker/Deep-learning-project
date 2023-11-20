@@ -59,7 +59,7 @@ class AudioDataset(Dataset):
             noise = noise.to_mono()
 
         # Pad or trim to the specified length of 5 seconds
-        self.fixed_length = int(signal.sample_rate*0.1)
+        self.fixed_length = int(signal.sample_rate*5)
         current_length = signal.audio_data.shape[1]
         if current_length < self.fixed_length:
                 # Pad if the signal is shorter than the fixed length
@@ -69,7 +69,7 @@ class AudioDataset(Dataset):
             start_position = np.random.randint(0, max(1, signal.audio_data.shape[1] - self.fixed_length))
             signal.audio_data = signal.audio_data[:, start_position:start_position + self.fixed_length]
 
-        self.fixed_length = int(noise.sample_rate*0.1)
+        self.fixed_length = int(noise.sample_rate*5) 
         current_length = noise.audio_data.shape[1]
         if current_length < self.fixed_length:
             padding = self.fixed_length - current_length
@@ -95,7 +95,7 @@ file_paths_noise = [os.path.join(drive_path, noise_folder, filename) for filenam
 
 # Create dataset and dataloader
 audio_dataset = AudioDataset(file_paths_sound, file_paths_noise)
-batch_size = 8
+batch_size = 32
 dataloader = DataLoader(audio_dataset, batch_size=batch_size, shuffle=True, num_workers=0, collate_fn=collate_fn)
 
 print('Dataloader - done')
@@ -109,7 +109,7 @@ import torchaudio.functional as F
 import torchaudio
 from help import download, DAC
 
-num_epochs = 10
+num_epochs = 50
 
 # Create the model, loss function, and optimizer
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -126,7 +126,7 @@ optimizer = optim.AdamW(model.parameters(), lr=lr)
 
 loss_vec = []
 epoch_vec = []
-
+output = []
 
 # Training loop
 for epoch in range(num_epochs):
@@ -188,6 +188,10 @@ for epoch in range(num_epochs):
     print("------------------------------------------------------------------------")
     print(f'Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(dataloader)}')
     print("------------------------------------------------------------------------")
+
+    output.append(total_loss / len(dataloader))
+
+np.savetxt('Output', output)    
 # Save the trained model
 # torch.save(model.state_dict(), 'trained_dac_model.pth')
 
