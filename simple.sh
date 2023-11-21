@@ -7,7 +7,7 @@
 ### -- set the job Name -
 #BSUB -J test_ejk
 ### -- ask for number of cores (default: 1) - 4 cores per gpu
-#BSUB -n 4
+#BSUB -n 16
 ### -- specify that the cores must be on the same host -
 #BSUB -R "span[hosts=1]" 
 ### -- specify that we need x GB of memory per core/slot -
@@ -38,14 +38,8 @@ cd /zhome/87/1/168411/Deep-learning-project
 # Your data is assumed to be in a directory on the cluster, adjust the path accordingly
 data_directory=/work3/s164396/data/DNS-Challenge-4/datasets_fullband/clean_fullband/vctk_wav48_silence_trimmed/p225
 
-#Create output file, override if already present  
-output=output_file.txt  
-#Write data to a file  
-ls > $output  
-#Checking the content of the file  
-gedit output_file.txt  
+python3 test.py | tee out_py.txt 
 
 # Your Python script execution command with the correct data path
-python3 test.py
-# python3 test.py &> /zhome/87/1/168411/Deep-learning-project/test.txt
+# python3 test.py
 
