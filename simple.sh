@@ -2,7 +2,7 @@
 
 ### General options
 ### -- specify queue -
-#BSUB -q gpuv100
+#BSUB -q hpc
 #BSUB -gpu "num=4"
 ### -- set the job Name -
 #BSUB -J test_ejk
