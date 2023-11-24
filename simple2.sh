@@ -2,10 +2,10 @@
 
 ### General options
 ### -- specify queue -
-#BSUB -q hpc
+#BSUB -q gpuv100
 #BSUB -gpu "num=2"
 ### -- set the job Name -
-#BSUB -J test_ejk
+#BSUB -J test_Julie_Boel_s214704
 ### -- ask for number of cores (default: 1) - 4 cores per gpu
 #BSUB -n 8
 ### -- specify that the cores must be on the same host -
