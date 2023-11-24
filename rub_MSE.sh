@@ -38,8 +38,8 @@ cd /zhome/87/1/168411/Deep-learning-project
 # Your data is assumed to be in a directory on the cluster, adjust the path accordingly
 data_directory=/work3/s164396/data/DNS-Challenge-4/datasets_fullband/clean_fullband/vctk_wav48_silence_trimmed/p225
 
-python3 test_2.py | tee out_py_2.txt 
+python3 MSE.py | tee out_py_2.txt 
 
 # Your Python script execution command with the correct data path
-# python3 test.py
+# python3 HUBER.py
 
