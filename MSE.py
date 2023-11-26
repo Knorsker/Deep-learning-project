@@ -121,7 +121,7 @@ import torchaudio.functional as F
 import torchaudio
 from help import download, DAC
 
-num_epochs = 50
+num_epochs = 100 #First: 50
 
 # Create the model, loss function, and optimizer
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -133,7 +133,7 @@ model_path = download(model_type="44khz")
 model = DAC.load(model_path)
 model = model.to(device)
 criterion = nn.MSELoss() # NOTE !!! HUBERLOSS, L1-loss, 
-lr = 1e-4
+lr = 1e-5 #First: 1e-4
 optimizer = optim.AdamW(model.parameters(), lr=lr)
 
 loss_vec = []
@@ -260,9 +260,9 @@ for epoch in range(num_epochs):
     print(f'Epoch [{epoch + 1}/{num_epochs}]')
 
 
-np.savetxt('Output_train', output_train)
-np.savetxt('Output_test', output_test)    
+np.savetxt('Output_train_MSE_2', output_train)
+np.savetxt('Output_test_MSE_2', output_test)    
 # Save the trained model
-# torch.save(model.state_dict(), 'trained_dac_model.pth')
+torch.save(model.state_dict(), 'trained_MSE_model.pth')
 
 print('Done')
