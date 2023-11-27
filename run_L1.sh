@@ -3,11 +3,11 @@
 ### General options
 ### -- specify queue -
 #BSUB -q gpuv100
-#BSUB -gpu "num=4"
+#BSUB -gpu "num=3"
 ### -- set the job Name -
 #BSUB -J L1_Julie_Boel_s214704
 ### -- ask for number of cores (default: 1) - 4 cores per gpu
-#BSUB -n 16
+#BSUB -n 12
 ### -- specify that the cores must be on the same host -
 #BSUB -R "span[hosts=1]" 
 ### -- specify that we need x GB of memory per core/slot -
@@ -23,7 +23,7 @@
 #BSUB -B 
 ### -- send notification at completion -
 #BSUB -N 
-### -- Specify the output and error file. %J is the job-id -
+### -- Specify the output and error file. %J- is the job-id -
 ### -- -o and -e mean append, -oo and -eo mean overwrite -
 #BSUB -o %J.out
 #BSUB -e %J.err
