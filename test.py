@@ -192,7 +192,7 @@ for epoch in range(num_epochs):
 
     output.append(total_loss / len(dataloader))
     
-    print(f'Epoch [{epoch + 1}/{num_epochs}]')
+    # print(f'Epoch [{epoch + 1}/{num_epochs}]')
 
 # np.savetxt('Output', output)    
 # Save the trained model
