@@ -1,6 +1,6 @@
 #!/bin/bash
 
-### General options ...
+### General options
 ### -- specify queue -
 #BSUB -q gpuv100
 #BSUB -gpu "num=3"
