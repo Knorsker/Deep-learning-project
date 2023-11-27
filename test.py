@@ -186,9 +186,9 @@ for epoch in range(num_epochs):
 
     # Print training statistics
 
-    print("------------------------------------------------------------------------")
-    print(f"Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(dataloader)}")
-    print("------------------------------------------------------------------------")
+    # print("------------------------------------------------------------------------")
+    # print(f"Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(dataloader)}")
+    # print("------------------------------------------------------------------------")
 
     output.append(total_loss / len(dataloader))
     
