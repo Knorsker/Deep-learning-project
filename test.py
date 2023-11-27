@@ -60,7 +60,7 @@ class AudioDataset(Dataset):
             noise = noise.to_mono()
 
         # Pad or trim to the specified length of 5 seconds
-        self.fixed_length = int(signal.sample_rate*5)
+        self.fixed_length = int(signal.sample_rate*2)
         current_length = signal.audio_data.shape[1]
         if current_length < self.fixed_length:
                 # Pad if the signal is shorter than the fixed length
@@ -110,7 +110,7 @@ import torchaudio.functional as F
 import torchaudio
 from help import download, DAC
 
-num_epochs = 50
+num_epochs = 10
 
 # Create the model, loss function, and optimizer
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
