@@ -187,14 +187,14 @@ for epoch in range(num_epochs):
     # Print training statistics
 
     print("------------------------------------------------------------------------")
-    print(f'Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(dataloader)}')
+    print(f"Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(dataloader)}")
     print("------------------------------------------------------------------------")
 
     output.append(total_loss / len(dataloader))
     
     print(f'Epoch [{epoch + 1}/{num_epochs}]')
 
-np.savetxt('Output', output)    
+# np.savetxt('Output', output)    
 # Save the trained model
 # torch.save(model.state_dict(), 'trained_dac_model.pth')
 
