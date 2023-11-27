@@ -4,6 +4,7 @@ import torchaudio
 import os
 import torch
 import numpy as np
+from .audiotools import AudioSignal
 
 
 class AudioData:
