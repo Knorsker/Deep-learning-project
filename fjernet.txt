@@ -1,0 +1,16 @@
+        for signal, noise in signals_batch:
+            # Calculate signal and noise power to find SNR value
+            signal_power = np.sum(signal.audio_data.numpy()**2) / len(signal.audio_data.numpy())
+            noise_power = np.sum(noise.audio_data.numpy()**2) / len(noise.audio_data.numpy())
+
+            # If noise_power or L2-norm of noise is 0, correct it
+            if noise_power == 0 or torch.norm(noise.audio_data, p = 2) == 0:
+                noise.audio_data += 1e-5
+                noise_power += 1e-5
+            # Calculate signal to noise ratio
+            snr_db = int(10 * np.log10(signal_power / noise_power))
+            # Define noisy signal
+            noisy_signal = signal
+            # Create noisy signal
+            noise_constant = torch.sqrt((torch.norm(signal.audio_data,p=2)**2/torch.norm(noise.audio_data,p=2)**2)*10**(-snr_db/10))
+            noisy_signal.audio_data = signal.audio_data + noise_constant*noise.audio_data
