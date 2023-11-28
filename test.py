@@ -177,7 +177,7 @@ for epoch in range(num_epochs):
         z, codes, latents, _, _ = model.encode(x)
 
         # Decode audio signal
-        y = model.decode(z)
+        # y = model.decode(z)
 
     #     if y.shape[2] > signal.shape[2]:
     #         y = y[:, :, :signal.shape[2]]
