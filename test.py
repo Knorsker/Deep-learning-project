@@ -148,59 +148,59 @@ test_loss_vec = []
 epoch_vec = []
 snr = torch.tensor([[0]]).cuda()
 
-# # Training loop
-# for epoch in range(num_epochs):
-#     model.train()
-#     total_loss = 0.0
+# Training loop
+for epoch in range(num_epochs):
+    model.train()
+    total_loss = 0.0
 
-#     for signal, noise in train_dataloader:
-#         signal = signal.cuda()
-#         noise = noise.cuda()
+    for signal, noise in train_dataloader:
+        signal = signal.cuda()
+        noise = noise.cuda()
 
-#         # Create noisy signal
-#         noise += 1e-5
-#         noisy_signal = add_noise(signal, noise, snr)
+        # Create noisy signal
+        noise += 1e-5
+        noisy_signal = add_noise(signal, noise, snr)
 
-#         """
-#         # Normalize Signals
-#         signal_audio_data = signal.audio_data/torch.max(torch.abs(signal.audio_data))
-#         noisy_signal.audio_data = noisy_signal.audio_data/torch.max(torch.abs(noisy_signal.audio_data))
-#         """
-#         # Zero the gradients
-#         optimizer.zero_grad()
+        """
+        # Normalize Signals
+        signal_audio_data = signal.audio_data/torch.max(torch.abs(signal.audio_data))
+        noisy_signal.audio_data = noisy_signal.audio_data/torch.max(torch.abs(noisy_signal.audio_data))
+        """
+        # Zero the gradients
+        optimizer.zero_grad()
 
-#         # Forward pass
-#         noisy_signal.to(model.device)
+        # Forward pass
+        noisy_signal.to(model.device)
 
-#         x = model.preprocess(noisy_signal, 44100)
-#         z, codes, latents, _, _ = model.encode(x)
+        x = model.preprocess(noisy_signal, 44100)
+        z, codes, latents, _, _ = model.encode(x)
 
-#         # Decode audio signal
-#         y = model.decode(z)
+        # Decode audio signal
+        y = model.decode(z)
 
-#         if y.shape[2] > signal.shape[2]:
-#             y = y[:, :, :signal.shape[2]]
-#         elif y.shape[2] < signal.shape[2]:
-#             padding = signal.shape[2] - y.shape[2]
-#             y = torch.nn.functional.pad(y, (0, padding))
+        if y.shape[2] > signal.shape[2]:
+            y = y[:, :, :signal.shape[2]]
+        elif y.shape[2] < signal.shape[2]:
+            padding = signal.shape[2] - y.shape[2]
+            y = torch.nn.functional.pad(y, (0, padding))
 
-#         # Calculate the loss for the current signal
-#         loss = criterion(y, signal)
+        # Calculate the loss for the current signal
+        loss = criterion(y, signal)
 
-#         # Backpropagation
-#         loss.backward()
+        # Backpropagation
+        loss.backward()
 
-#         # Update model parameters
-#         optimizer.step()
+        # Update model parameters
+        optimizer.step()
 
-#         total_loss += loss.item()
+        total_loss += loss.item()
 
-#     # Print training statistics
-#     train_loss_vec.append(total_loss / len(train_dataloader))
-#     epoch_vec.append(epoch)
-#     # print("------------------------------------------------------------------------")
-#     # print(f'Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(train_dataloader)}')
-#     # print("------------------------------------------------------------------------")
+    # Print training statistics
+    train_loss_vec.append(total_loss / len(train_dataloader))
+    epoch_vec.append(epoch)
+    print("------------------------------------------------------------------------")
+    print(f'Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(train_dataloader)}')
+    print("------------------------------------------------------------------------")
 
 
 #     # Testing
@@ -251,7 +251,7 @@ snr = torch.tensor([[0]]).cuda()
 #     # print("------------------------------------------------------------------------")
     
 
-# np.savetxt('Output_train_MSE', train_loss_vec)
+np.savetxt('Output_train_MSE', train_loss_vec)
 # np.savetxt('Output_test_MSE', test_loss_vec)    
 
 # # Save the trained model
