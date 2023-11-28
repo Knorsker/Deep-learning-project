@@ -3,11 +3,11 @@
 ### General options
 ### -- specify queue -
 #BSUB -q gpuv100
-#BSUB -gpu "num=3"
+#BSUB -gpu "num=1"
 ### -- set the job Name -
 #BSUB -J MSE_Julie_Boel_s214704
 ### -- ask for number of cores (default: 1) - 4 cores per gpu
-#BSUB -n 12
+#BSUB -n 4
 ### -- specify that the cores must be on the same host -
 #BSUB -R "span[hosts=1]" 
 ### -- specify that we need x GB of memory per core/slot -
