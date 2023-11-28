@@ -171,36 +171,37 @@ for epoch in range(num_epochs):
 
         # Forward pass
         noisy_signal.to(model.device)
+        print(f'yes{num_epochs}')
 
-        x = model.preprocess(noisy_signal, 44100)
-        z, codes, latents, _, _ = model.encode(x)
+    #     x = model.preprocess(noisy_signal, 44100)
+    #     z, codes, latents, _, _ = model.encode(x)
 
-        # Decode audio signal
-        y = model.decode(z)
+    #     # Decode audio signal
+    #     y = model.decode(z)
 
-        if y.shape[2] > signal.shape[2]:
-            y = y[:, :, :signal.shape[2]]
-        elif y.shape[2] < signal.shape[2]:
-            padding = signal.shape[2] - y.shape[2]
-            y = torch.nn.functional.pad(y, (0, padding))
+    #     if y.shape[2] > signal.shape[2]:
+    #         y = y[:, :, :signal.shape[2]]
+    #     elif y.shape[2] < signal.shape[2]:
+    #         padding = signal.shape[2] - y.shape[2]
+    #         y = torch.nn.functional.pad(y, (0, padding))
 
-        # Calculate the loss for the current signal
-        loss = criterion(y, signal)
+    #     # Calculate the loss for the current signal
+    #     loss = criterion(y, signal)
 
-        # Backpropagation
-        loss.backward()
+    #     # Backpropagation
+    #     loss.backward()
 
-        # Update model parameters
-        optimizer.step()
+    #     # Update model parameters
+    #     optimizer.step()
 
-        total_loss += loss.item()
+    #     total_loss += loss.item()
 
-    # Print training statistics
-    train_loss_vec.append(total_loss / len(train_dataloader))
-    epoch_vec.append(epoch)
-    print("------------------------------------------------------------------------")
-    print(f'Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(train_dataloader)}')
-    print("------------------------------------------------------------------------")
+    # # Print training statistics
+    # train_loss_vec.append(total_loss / len(train_dataloader))
+    # epoch_vec.append(epoch)
+    # print("------------------------------------------------------------------------")
+    # print(f'Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(train_dataloader)}')
+    # print("------------------------------------------------------------------------")
 
 
 #     # Testing
@@ -251,7 +252,7 @@ for epoch in range(num_epochs):
 #     # print("------------------------------------------------------------------------")
     
 
-np.savetxt('Output_train_MSE', train_loss_vec)
+# np.savetxt('Output_train_MSE', train_loss_vec)
 # np.savetxt('Output_test_MSE', test_loss_vec)    
 
 # # Save the trained model
