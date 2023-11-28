@@ -3,17 +3,17 @@
 ### General options
 ### -- specify queue -
 #BSUB -q gpuv100
-#BSUB -gpu "num=2"
+#BSUB -gpu "num=1"
 ### -- set the job Name -
 #BSUB -J test_Julie_Boel_s214704
 ### -- ask for number of cores (default: 1) - 4 cores per gpu
-#BSUB -n 8
+#BSUB -n 4
 ### -- specify that the cores must be on the same host -
 #BSUB -R "span[hosts=1]" 
 ### -- specify that we need x GB of memory per core/slot -
-#BSUB -R "rusage[mem=6GB]" 
+#BSUB -R "rusage[mem=10GB]" 
 ### -- specify that we want the job to get killed if it exceeds 3 GB per core/slot -
-#BSUB -M 6GB
+#BSUB -M 10GB
 ### -- set walltime limit: hh:mm -
 #BSUB -W 08:00
 
