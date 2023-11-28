@@ -120,7 +120,7 @@ print('Dataloader - done')
 import torch.optim as optim
 import torch.nn as nn
 from torch.utils.data import DataLoader
-import torchaudio.functional as F
+# import torchaudio.functional as F
 import torchaudio
 from help import download, DAC, add_noise
 from torch.optim.lr_scheduler import ReduceLROnPlateau
@@ -137,7 +137,7 @@ model_path = download(model_type="44khz")
 model = DAC.load(model_path)
 
 model = model.to(device).train()
-criterion = nn.functional.huber_loss() # NOTE 
+criterion = nn.HUBERLoss() # NOTE 
 lr = 1e-5 #First: 1e-4
 optimizer = optim.AdamW(model.parameters(), lr=lr)
 
