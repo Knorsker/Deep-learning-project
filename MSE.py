@@ -198,9 +198,9 @@ for epoch in range(num_epochs):
     # Print training statistics
     train_loss_vec.append(total_loss / len(train_dataloader))
     epoch_vec.append(epoch)
-    print("------------------------------------------------------------------------")
-    print(f'Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(train_dataloader)}')
-    print("------------------------------------------------------------------------")
+    # print("------------------------------------------------------------------------")
+    # print(f'Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(train_dataloader)}')
+    # print("------------------------------------------------------------------------")
 
 
     # Testing
@@ -247,8 +247,8 @@ for epoch in range(num_epochs):
     test_loss_vec.append(average_test_loss)
     
     # Print testing statistics
-    print(f'Epoch [{epoch + 1}/{num_epochs}] - Test Loss: {average_test_loss}')
-    print("------------------------------------------------------------------------")
+    # print(f'Epoch [{epoch + 1}/{num_epochs}] - Test Loss: {average_test_loss}')
+    # print("------------------------------------------------------------------------")
     
 
 np.savetxt('Output_train_MSE', train_loss_vec)
