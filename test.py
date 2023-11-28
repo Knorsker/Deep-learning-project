@@ -171,13 +171,13 @@ for epoch in range(num_epochs):
 
         # Forward pass
         noisy_signal.to(model.device)
-        print(f'yes{num_epochs}')
+        print(f'yes{epoch}')
 
-    #     x = model.preprocess(noisy_signal, 44100)
-    #     z, codes, latents, _, _ = model.encode(x)
+        x = model.preprocess(noisy_signal, 44100)
+        z, codes, latents, _, _ = model.encode(x)
 
-    #     # Decode audio signal
-    #     y = model.decode(z)
+        # Decode audio signal
+        y = model.decode(z)
 
     #     if y.shape[2] > signal.shape[2]:
     #         y = y[:, :, :signal.shape[2]]
