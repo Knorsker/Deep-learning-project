@@ -122,7 +122,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 import torchaudio.functional as F
 import torchaudio
-from help import download, DAC
+from help import download, DAC, add_noise
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 num_epochs = 100 #First: 50
@@ -159,7 +159,7 @@ for epoch in range(num_epochs):
 
         # Create noisy signal
         noise += 1e-5
-        noisy_signal = F.add_noise(signal, noise, snr)
+        noisy_signal = add_noise(signal, noise, snr)
 
         """
         # Normalize Signals
@@ -213,7 +213,7 @@ for epoch in range(num_epochs):
             noise = noise.cuda()
             # Create noisy signal
             noise += 1e-5
-            noisy_signal = F.add_noise(signal, noise, snr)
+            noisy_signal = add_noise(signal, noise, snr)
 
             """
             # Normalize Signals
