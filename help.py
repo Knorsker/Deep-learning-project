@@ -434,6 +434,13 @@ def load_model(
     return generator
 
 
+def add_noise(waveform: torch.Tensor, noise: torch.Tensor, snr: torch.Tensor) -> torch.Tensor:
+    b = torch.norm(waveform, p=2)**2/torch.norm(waveform, p=2)**2
+    c = 10**(-snr/10)
+
+    a = torch.sqrt(b*c)
+
+    return waveform + a*noise
 
 # def add_noise(
 #     waveform: torch.Tensor, noise: torch.Tensor, snr: torch.Tensor, lengths: Optional[torch.Tensor] = None
