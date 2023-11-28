@@ -137,7 +137,7 @@ model_path = download(model_type="44khz")
 model = DAC.load(model_path)
 
 model = model.to(device).train()
-criterion = nn.HUBERLoss() # NOTE 
+criterion = nn.functional.huber_loss() # NOTE 
 lr = 1e-5 #First: 1e-4
 optimizer = optim.AdamW(model.parameters(), lr=lr)
 
