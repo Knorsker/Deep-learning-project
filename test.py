@@ -45,12 +45,14 @@ class AudioDataset(Dataset):
 
         audio_data, sample_rate = torchaudio.load(audio_path)
         if sample_rate != target_sample_rate:
-            sample_rate = target_sample_rate
+            resample_transform = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=self.target_sample_rate)
+            audio_data = resample_transform(audio_data)
         signal = AudioData(audio_data,sample_rate)
 
         audio_data_noise, sample_rate_noise = torchaudio.load(noise_path)
         if sample_rate_noise != target_sample_rate:
-            sample_rate_noise = target_sample_rate
+            resample_transform = torchaudio.transforms.Resample(orig_freq=sample_rate_noise, new_freq=self.target_sample_rate)
+            audio_data_noise = resample_transform(audio_data_noise)
         noise = AudioData(audio_data_noise, sample_rate_noise)
 
         # Convert to mono if stereo
@@ -171,91 +173,90 @@ for epoch in range(num_epochs):
 
         # Forward pass
         noisy_signal.to(model.device)
-        print(f'yes{epoch}')
 
         x = model.preprocess(noisy_signal, 44100)
         z, codes, latents, _, _ = model.encode(x)
 
         # Decode audio signal
-        # y = model.decode(z)
+        y = model.decode(z)
 
-    #     if y.shape[2] > signal.shape[2]:
-    #         y = y[:, :, :signal.shape[2]]
-    #     elif y.shape[2] < signal.shape[2]:
-    #         padding = signal.shape[2] - y.shape[2]
-    #         y = torch.nn.functional.pad(y, (0, padding))
+        if y.shape[2] > signal.shape[2]:
+            y = y[:, :, :signal.shape[2]]
+        elif y.shape[2] < signal.shape[2]:
+            padding = signal.shape[2] - y.shape[2]
+            y = torch.nn.functional.pad(y, (0, padding))
 
-    #     # Calculate the loss for the current signal
-    #     loss = criterion(y, signal)
+        # Calculate the loss for the current signal
+        loss = criterion(y, signal)
 
-    #     # Backpropagation
-    #     loss.backward()
+        # Backpropagation
+        loss.backward()
 
-    #     # Update model parameters
-    #     optimizer.step()
+        # Update model parameters
+        optimizer.step()
 
-    #     total_loss += loss.item()
+        total_loss += loss.item()
 
-    # # Print training statistics
-    # train_loss_vec.append(total_loss / len(train_dataloader))
-    # epoch_vec.append(epoch)
-    # print("------------------------------------------------------------------------")
-    # print(f'Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(train_dataloader)}')
-    # print("------------------------------------------------------------------------")
+    # Print training statistics
+    train_loss_vec.append(total_loss / len(train_dataloader))
+    epoch_vec.append(epoch)
+    print("------------------------------------------------------------------------")
+    print(f'Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(train_dataloader)}')
+    print("------------------------------------------------------------------------")
 
 
-#     # Testing
-#     model.eval()
-#     total_test_loss = 0.0
+    # Testing
+    model.eval()
+    total_test_loss = 0.0
 
-#     with torch.no_grad():
-#         for signals_batch in test_dataloader:
-#             signal = signal.cuda()
-#             noise = noise.cuda()
-#             # Create noisy signal
-#             noise += 1e-5
-#             noisy_signal = add_noise(signal, noise, snr)
+    with torch.no_grad():
+        for signals_batch in test_dataloader:
+            signal = signal.cuda()
+            noise = noise.cuda()
+            # Create noisy signal
+            noise += 1e-5
+            noisy_signal = add_noise(signal, noise, snr)
 
-#             """
-#             # Normalize Signals
-#             signal_audio_data = signal.audio_data/torch.max(torch.abs(signal.audio_data))
-#             noisy_signal.audio_data = noisy_signal.audio_data/torch.max(torch.abs(noisy_signal.audio_data))
-#             """
-#             # Zero the gradients
-#             optimizer.zero_grad()
+            """
+            # Normalize Signals
+            signal_audio_data = signal.audio_data/torch.max(torch.abs(signal.audio_data))
+            noisy_signal.audio_data = noisy_signal.audio_data/torch.max(torch.abs(noisy_signal.audio_data))
+            """
+            # Zero the gradients
+            optimizer.zero_grad()
 
-#             # Forward pass
-#             noisy_signal = noisy_signal.to(model.device)
-#             x = model.preprocess(noisy_signal, 44100)
-#             z, codes, latents, _, _ = model.encode(x)
+            # Forward pass
+            noisy_signal = noisy_signal.to(model.device)
+            x = model.preprocess(noisy_signal, 44100)
+            z, codes, latents, _, _ = model.encode(x)
 
-#             # Decode audio signal
-#             y = model.decode(z)
+            # Decode audio signal
+            y = model.decode(z)
 
-#             if y.shape[2] > signal.shape[2]:
-#                 y = y[:, :, :signal.shape[2]]
-#             elif y.shape[2] < signal.shape[2]:
-#                 padding = signal.shape[2] - y.shape[2]
-#                 y = torch.nn.functional.pad(y, (0, padding))
+            if y.shape[2] > signal.shape[2]:
+                y = y[:, :, :signal.shape[2]]
+            elif y.shape[2] < signal.shape[2]:
+                padding = signal.shape[2] - y.shape[2]
+                y = torch.nn.functional.pad(y, (0, padding))
 
-#             # Calculate the loss for the current signal
-#             loss = criterion(y, signal)
+            # Calculate the loss for the current signal
+            loss = criterion(y, signal)
 
-#             total_test_loss += loss.item()
+            total_test_loss += loss.item()
 
-#     # Calculate average test loss
-#     average_test_loss = total_test_loss / len(test_dataloader)
-#     test_loss_vec.append(average_test_loss)
+    # Calculate average test loss
+    average_test_loss = total_test_loss / len(test_dataloader)
+    test_loss_vec.append(average_test_loss)
     
-#     # Print testing statistics
-#     # print(f'Epoch [{epoch + 1}/{num_epochs}] - Test Loss: {average_test_loss}')
-#     # print("------------------------------------------------------------------------")
+    # Print testing statistics
+    print(f'Epoch [{epoch + 1}/{num_epochs}] - Test Loss: {average_test_loss}')
+    print("------------------------------------------------------------------------")
     
 
-# np.savetxt('Output_train_MSE', train_loss_vec)
-# np.savetxt('Output_test_MSE', test_loss_vec)    
+np.savetxt('Output_train_MSE', train_loss_vec)
+np.savetxt('Output_test_MSE', test_loss_vec)    
 
-# # Save the trained model
-# torch.save(model.state_dict(), 'trained_MSE_model.pth')
+# Save the trained model
+torch.save(model.state_dict(), 'trained_MSE_model.pth')
 
 print('Done')
