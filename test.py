@@ -175,6 +175,7 @@ for epoch in range(num_epochs):
         noisy_signal.to(model.device)
 
         x = model.preprocess(noisy_signal, 44100)
+        print(f'done{epoch}')
         z, codes, latents, _, _ = model.encode(x)
 
         # Decode audio signal
@@ -223,7 +224,7 @@ for epoch in range(num_epochs):
             noisy_signal.audio_data = noisy_signal.audio_data/torch.max(torch.abs(noisy_signal.audio_data))
             """
             # Zero the gradients
-            optimizer.zero_grad()
+            # optimizer.zero_grad()
 
             # Forward pass
             noisy_signal = noisy_signal.to(model.device)
