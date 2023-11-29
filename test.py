@@ -161,7 +161,7 @@ for epoch in range(num_epochs):
 
         # Create noisy signal
         noise += 1e-5
-        noisy_signal = add_noise(signal, noise, snr)
+        noisy_signal = F.add_noise(signal, noise, snr)
 
         """
         # Normalize Signals
@@ -216,7 +216,7 @@ for epoch in range(num_epochs):
             noise = noise.cuda()
             # Create noisy signal
             noise += 1e-5
-            noisy_signal = add_noise(signal, noise, snr)
+            noisy_signal = F.add_noise(signal, noise, snr)
 
             """
             # Normalize Signals
