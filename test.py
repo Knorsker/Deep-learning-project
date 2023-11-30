@@ -112,7 +112,7 @@ train_paths_noise, test_paths_noise = train_test_split(
 train_dataset = AudioDataset(train_paths_sound, train_paths_noise)
 test_dataset = AudioDataset(test_paths_sound, test_paths_noise)
 
-batch_size = 16
+batch_size = 8
 train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2, collate_fn=collate_fn)
 test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2, collate_fn=collate_fn)
 
