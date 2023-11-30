@@ -112,7 +112,7 @@ train_paths_noise, test_paths_noise = train_test_split(
 train_dataset = AudioDataset(train_paths_sound, train_paths_noise)
 test_dataset = AudioDataset(test_paths_sound, test_paths_noise)
 
-batch_size = 5
+batch_size = 4
 train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2, collate_fn=collate_fn)
 test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2, collate_fn=collate_fn)
 
@@ -139,7 +139,7 @@ model_path = download(model_type="44khz")
 model = DAC.load(model_path)
 
 model = model.to(device).train()
-criterion = nn.HuberLossLoss() # NOTE 
+criterion = nn.HuberLoss() # NOTE 
 lr = 1e-5 #First: 1e-4
 optimizer = optim.AdamW(model.parameters(), lr=lr)
 
@@ -254,10 +254,10 @@ for epoch in range(num_epochs):
     print("------------------------------------------------------------------------")
     
 
-np.savetxt('Output_train_MSE', train_loss_vec)
-np.savetxt('Output_test_MSE', test_loss_vec)    
+np.savetxt('Output_train_HUBER', train_loss_vec)
+np.savetxt('Output_test_HUBER', test_loss_vec)    
 
 # Save the trained model
-torch.save(model.state_dict(), 'trained_MSE_model.pth')
+torch.save(model.state_dict(), 'trained_HUBER_model.pth')
 
 print('Done')

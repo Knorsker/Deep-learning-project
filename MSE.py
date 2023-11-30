@@ -45,12 +45,14 @@ class AudioDataset(Dataset):
 
         audio_data, sample_rate = torchaudio.load(audio_path)
         if sample_rate != target_sample_rate:
-            sample_rate = target_sample_rate
+            resample_transform = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=self.target_sample_rate)
+            audio_data = resample_transform(audio_data)
         signal = AudioData(audio_data,sample_rate)
 
         audio_data_noise, sample_rate_noise = torchaudio.load(noise_path)
         if sample_rate_noise != target_sample_rate:
-            sample_rate_noise = target_sample_rate
+            resample_transform = torchaudio.transforms.Resample(orig_freq=sample_rate_noise, new_freq=self.target_sample_rate)
+            audio_data_noise = resample_transform(audio_data_noise)
         noise = AudioData(audio_data_noise, sample_rate_noise)
 
         # Convert to mono if stereo
@@ -60,7 +62,7 @@ class AudioDataset(Dataset):
             noise.audio_data = torch.mean(noise.audio_data, dim = -2, keepdim = True)
 
         # Pad or trim to the specified length of 5 seconds
-        self.fixed_length = int(signal.sample_rate*1)
+        self.fixed_length = int(signal.sample_rate*5)
         current_length = signal.audio_data.shape[1]
         if current_length < self.fixed_length:
             # Pad if the signal is shorter than the fixed length
@@ -70,7 +72,7 @@ class AudioDataset(Dataset):
             start_position = np.random.randint(0, max(1, signal.audio_data.shape[1] - self.fixed_length))
             signal.audio_data = signal.audio_data[:, start_position:start_position + self.fixed_length]
 
-        self.fixed_length = int(noise.sample_rate*1) 
+        self.fixed_length = int(noise.sample_rate*5) 
         current_length = noise.audio_data.shape[1]
         if current_length < self.fixed_length:
             padding = self.fixed_length - current_length
@@ -110,7 +112,7 @@ train_paths_noise, test_paths_noise = train_test_split(
 train_dataset = AudioDataset(train_paths_sound, train_paths_noise)
 test_dataset = AudioDataset(test_paths_sound, test_paths_noise)
 
-batch_size = 16
+batch_size = 4
 train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2, collate_fn=collate_fn)
 test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2, collate_fn=collate_fn)
 
@@ -125,7 +127,7 @@ import torchaudio
 from help import download, DAC, add_noise
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
-num_epochs = 100 #First: 50
+num_epochs = 500 #First: 50
 
 # Create the model, loss function, and optimizer
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -173,6 +175,7 @@ for epoch in range(num_epochs):
         noisy_signal.to(model.device)
 
         x = model.preprocess(noisy_signal, 44100)
+        # print(f'done{epoch}')
         z, codes, latents, _, _ = model.encode(x)
 
         # Decode audio signal
@@ -198,9 +201,9 @@ for epoch in range(num_epochs):
     # Print training statistics
     train_loss_vec.append(total_loss / len(train_dataloader))
     epoch_vec.append(epoch)
-    # print("------------------------------------------------------------------------")
-    # print(f'Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(train_dataloader)}')
-    # print("------------------------------------------------------------------------")
+    print("------------------------------------------------------------------------")
+    print(f'Epoch [{epoch + 1}/{num_epochs}] - Loss: {total_loss / len(train_dataloader)}')
+    print("------------------------------------------------------------------------")
 
 
     # Testing
@@ -221,7 +224,7 @@ for epoch in range(num_epochs):
             noisy_signal.audio_data = noisy_signal.audio_data/torch.max(torch.abs(noisy_signal.audio_data))
             """
             # Zero the gradients
-            optimizer.zero_grad()
+            # optimizer.zero_grad()
 
             # Forward pass
             noisy_signal = noisy_signal.to(model.device)
@@ -247,8 +250,8 @@ for epoch in range(num_epochs):
     test_loss_vec.append(average_test_loss)
     
     # Print testing statistics
-    # print(f'Epoch [{epoch + 1}/{num_epochs}] - Test Loss: {average_test_loss}')
-    # print("------------------------------------------------------------------------")
+    print(f'Epoch [{epoch + 1}/{num_epochs}] - Test Loss: {average_test_loss}')
+    print("------------------------------------------------------------------------")
     
 
 np.savetxt('Output_train_MSE', train_loss_vec)
