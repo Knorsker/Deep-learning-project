@@ -62,7 +62,7 @@ class AudioDataset(Dataset):
             noise.audio_data = torch.mean(noise.audio_data, dim = -2, keepdim = True)
 
         # Pad or trim to the specified length of 5 seconds
-        self.fixed_length = int(signal.sample_rate*5)
+        self.fixed_length = int(signal.sample_rate*3)
         current_length = signal.audio_data.shape[1]
         if current_length < self.fixed_length:
             # Pad if the signal is shorter than the fixed length
@@ -72,7 +72,7 @@ class AudioDataset(Dataset):
             start_position = np.random.randint(0, max(1, signal.audio_data.shape[1] - self.fixed_length))
             signal.audio_data = signal.audio_data[:, start_position:start_position + self.fixed_length]
 
-        self.fixed_length = int(noise.sample_rate*5) 
+        self.fixed_length = int(noise.sample_rate*3) 
         current_length = noise.audio_data.shape[1]
         if current_length < self.fixed_length:
             padding = self.fixed_length - current_length
