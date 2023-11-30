@@ -175,7 +175,7 @@ for epoch in range(num_epochs):
         noisy_signal.to(model.device)
 
         x = model.preprocess(noisy_signal, 44100)
-        print(f'done{epoch}')
+        # print(f'done{epoch}')
         z, codes, latents, _, _ = model.encode(x)
 
         # Decode audio signal
