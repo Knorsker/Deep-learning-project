@@ -3,7 +3,7 @@
 ### General options
 ### -- specify queue -
 #BSUB -q gpua100
-#BSUB -R "select[gpu80gb]"
+#BSUB -R "select[gpu70gb]"
 #BSUB -gpu "num=1"
 ### -- set the job Name -
 #BSUB -J MSE_Julie_Boel_s214704
