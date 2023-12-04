@@ -112,7 +112,7 @@ train_paths_noise, test_paths_noise = train_test_split(
 train_dataset = AudioDataset(train_paths_sound, train_paths_noise)
 test_dataset = AudioDataset(test_paths_sound, test_paths_noise)
 
-batch_size = 2
+batch_size = 1
 train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2, collate_fn=collate_fn)
 test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2, collate_fn=collate_fn)
 
@@ -127,7 +127,7 @@ import torchaudio
 from help import download, DAC, add_noise
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
-num_epochs = 100 #First: 50
+num_epochs = 500 #First: 50
 
 # Create the model, loss function, and optimizer
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -254,10 +254,10 @@ for epoch in range(num_epochs):
     print("------------------------------------------------------------------------")
     
 
-np.savetxt('Output_train_MSE', train_loss_vec)
-np.savetxt('Output_test_MSE', test_loss_vec)    
+np.savetxt('Output_train_MSE2', train_loss_vec)
+np.savetxt('Output_test_MSE2', test_loss_vec)    
 
 # Save the trained model
-torch.save(model.state_dict(), 'trained_MSE_model.pth')
+torch.save(model.state_dict(), 'trained_MSE2_model.pth')
 
 print('Done')

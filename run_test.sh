@@ -2,10 +2,11 @@
 
 ### General options
 ### -- specify queue -
-#BSUB -q gpuv100
+#BSUB -q gpua100
+#BSUB -R "select[gpu80gb]"
 #BSUB -gpu "num=1"
 ### -- set the job Name -
-#BSUB -J test_Julie_Boel_s214704
+#BSUB -J MSE2_Julie_Boel_s214704
 ### -- ask for number of cores (default: 1) - 4 cores per gpu
 #BSUB -n 4
 ### -- specify that the cores must be on the same host -
@@ -15,7 +16,7 @@
 ### -- specify that we want the job to get killed if it exceeds 3 GB per core/slot -
 #BSUB -M 6GB
 ### -- set walltime limit: hh:mm -
-#BSUB -W 08:00
+#BSUB -W 24:00
 
 ### -- set the email address -# please uncomment the following line and put in your e-mail address, # if you want to receive e-mail notifications on a non-default address 
 #BSUB -u s214704@student.dtu.dk 
@@ -41,5 +42,5 @@ data_directory=/work3/s164396/data/DNS-Challenge-4/datasets_fullband/clean_fullb
 # python3 MSE.py | tee out_py_2.txt 
 
 # Your Python script execution command with the correct data path
-python3 test.py
+python3 MSE2.py
 
