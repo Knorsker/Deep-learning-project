@@ -42,5 +42,5 @@ data_directory=/work3/s164396/data/DNS-Challenge-4/datasets_fullband/clean_fullb
 # python3 MSE.py | tee out_py_2.txt 
 
 # Your Python script execution command with the correct data path
-python3 MSE2.py
+python3 MSE.py
 
