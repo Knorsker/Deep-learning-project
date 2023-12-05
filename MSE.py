@@ -112,7 +112,7 @@ train_paths_noise, test_paths_noise = train_test_split(
 train_dataset = AudioDataset(train_paths_sound, train_paths_noise)
 test_dataset = AudioDataset(test_paths_sound, test_paths_noise)
 
-batch_size = 4
+batch_size = 2
 train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2, collate_fn=collate_fn)
 test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2, collate_fn=collate_fn)
 
@@ -148,7 +148,7 @@ scheduler = ReduceLROnPlateau(optimizer, mode='min', patience=5, factor=0.1)
 train_loss_vec = []
 test_loss_vec = []
 epoch_vec = []
-snr = torch.tensor([[0]]).cuda()
+snr = torch.tensor([[2]]).cuda()
 
 # Training loop
 for epoch in range(num_epochs):
